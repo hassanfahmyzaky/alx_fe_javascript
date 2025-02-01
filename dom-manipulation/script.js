@@ -72,6 +72,22 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     showConflictNotification();
   }
   
+  // Function to sync local quotes with server data
+  async function syncQuotes() {
+    try {
+      // First, fetch the latest quotes from the server
+      await fetchQuotesFromServer();
+  
+      // After syncing, post any local changes (new quotes) to the server
+      for (const quote of quotes) {
+        await postQuoteToServer(quote);
+      }
+      
+    } catch (error) {
+      console.error("Error syncing quotes:", error);
+    }
+  }
+  
   // Function to display quotes on the page
   function updateQuoteDisplay() {
     const quoteDisplay = document.getElementById('quoteDisplay');
@@ -103,8 +119,8 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   // Periodically fetch new data from the server and update local storage
   function startPeriodicSync() {
     setInterval(() => {
-      fetchQuotesFromServer();
-    }, 60000);  // Fetch every minute (60000 ms)
+      syncQuotes();  // Sync quotes with the server every minute (60000 ms)
+    }, 60000);  // Fetch and sync every minute
   }
   
   // Function to add a new quote and also post it to the server
