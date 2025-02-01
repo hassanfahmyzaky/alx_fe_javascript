@@ -59,8 +59,42 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     document.body.appendChild(formDiv); // Append the form to the body or wherever you prefer
   }
   
+  // Export quotes as a JSON file
+  function exportToJson() {
+    const jsonBlob = new Blob([JSON.stringify(quotes, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(jsonBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'quotes.json'; // Filename for the exported JSON
+    a.click();
+    URL.revokeObjectURL(url); // Release the blob object after the download is triggered
+  }
+  
+  // Import quotes from a JSON file
+  function importFromJsonFile(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function(event) {
+      try {
+        const importedQuotes = JSON.parse(event.target.result);
+        if (Array.isArray(importedQuotes)) {
+          quotes = importedQuotes;
+          saveQuotes(); // Save to localStorage
+          alert('Quotes imported successfully!');
+        } else {
+          alert('Invalid JSON format');
+        }
+      } catch (error) {
+        alert('Error importing file');
+      }
+    };
+    fileReader.readAsText(event.target.files[0]);
+  }
+  
   // Event listener for showing a random quote
   document.getElementById('newQuote').addEventListener('click', showRandomQuote);
+  
+  // Event listener for export button
+  document.getElementById('exportButton').addEventListener('click', exportToJson);
   
   // Optional: Display an initial quote when the page loads
   showRandomQuote();
