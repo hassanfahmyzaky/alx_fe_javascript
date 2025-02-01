@@ -82,7 +82,10 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
       for (const quote of quotes) {
         await postQuoteToServer(quote);
       }
-      
+  
+      // Show sync success notification
+      showSyncSuccessNotification();
+  
     } catch (error) {
       console.error("Error syncing quotes:", error);
     }
@@ -103,6 +106,17 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     notification.className = 'notification';
     notification.innerHTML = `
       <p>Data has been synced with the server. Some changes may have been resolved automatically.</p>
+      <button onclick="closeNotification()">Close</button>
+    `;
+    document.body.appendChild(notification);
+  }
+  
+  // Function to show notification when quotes are synced successfully
+  function showSyncSuccessNotification() {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.innerHTML = `
+      <p><strong>Success:</strong> Quotes synced with server!</p>
       <button onclick="closeNotification()">Close</button>
     `;
     document.body.appendChild(notification);
@@ -205,5 +219,4 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   createAddQuoteForm();  // Create the "Add Quote" form
   startPeriodicSync();    // Start syncing every minute
   updateQuoteDisplay();   // Display the initial quotes
-  
   
