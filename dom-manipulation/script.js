@@ -149,4 +149,5 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   populateCategories();   // To populate the category dropdown
   filterQuotes();         // To load the quotes based on the selected category
   createAddQuoteForm();
+
   
