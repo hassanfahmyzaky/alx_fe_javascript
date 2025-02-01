@@ -29,9 +29,9 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     });
     
     // Load last selected category from localStorage (if any)
-    const lastSelectedCategory = localStorage.getItem('lastSelectedCategory');
-    if (lastSelectedCategory) {
-      categoryFilter.value = lastSelectedCategory;
+    const lastSelectedCategory = localStorage.getItem('SelectedCategory');
+    if (SelectedCategory) {
+      categoryFilter.value = SelectedCategory;
       filterQuotes();  // Apply the last selected category
     }
   }
