@@ -39,7 +39,7 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   function filterQuotes() {
     const category = document.getElementById('categoryFilter').value;
   
-    // Save the selected category to localStorage
+    // Save the selected category to localStorage for future sessions
     localStorage.setItem('lastSelectedCategory', category);
   
     // Filter quotes by category
@@ -146,7 +146,7 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   document.getElementById('exportButton').addEventListener('click', exportToJson);
   
   // Initial setup when the page loads
-  populateCategories();
-  filterQuotes();  // To load the quotes based on the selected category
+  populateCategories();   // To populate the category dropdown
+  filterQuotes();         // To load the quotes based on the selected category
   createAddQuoteForm();
   
