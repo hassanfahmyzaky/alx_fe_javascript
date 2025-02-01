@@ -32,6 +32,7 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     const lastSelectedCategory = localStorage.getItem('lastSelectedCategory');
     if (lastSelectedCategory) {
       categoryFilter.value = lastSelectedCategory;
+      filterQuotes();  // Apply the last selected category
     }
   }
   
@@ -149,5 +150,4 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   populateCategories();   // To populate the category dropdown
   filterQuotes();         // To load the quotes based on the selected category
   createAddQuoteForm();
-
   
