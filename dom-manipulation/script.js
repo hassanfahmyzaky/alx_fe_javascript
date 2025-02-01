@@ -13,12 +13,11 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   // Simulate fetching quotes from the server (using JSONPlaceholder for the mock API)
   async function fetchQuotesFromServer() {
     try {
-      // Simulate an API request with a delay
+      // Simulate an API request with a delay (GET request)
       const response = await fetch('https://jsonplaceholder.typicode.com/posts'); // Simulating an API call
       const serverData = await response.json();
   
       // For simplicity, assume the server sends an array of objects with a "title" and "body" (we'll use these as quotes).
-      // We will convert the mock data into a format similar to our quotes.
       const serverQuotes = serverData.slice(0, 5).map(post => ({
         text: post.body,
         category: "General"
@@ -29,6 +28,27 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   
     } catch (error) {
       console.error("Error fetching data from server:", error);
+    }
+  }
+  
+  // Function to post new quotes to the server (mock server interaction with POST)
+  async function postQuoteToServer(quote) {
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+        method: 'POST',  // HTTP method
+        headers: {
+          'Content-Type': 'application/json'  // Setting the content type as JSON
+        },
+        body: JSON.stringify(quote)  // Sending the quote as JSON
+      });
+      
+      const data = await response.json();  // Get the response data
+      console.log('Quote successfully posted to server:', data);
+      alert('Quote posted successfully!');
+      
+    } catch (error) {
+      console.error("Error posting quote to server:", error);
+      alert('Failed to post quote to server.');
     }
   }
   
@@ -87,17 +107,21 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     }, 60000);  // Fetch every minute (60000 ms)
   }
   
-  // Function to add a new quote
+  // Function to add a new quote and also post it to the server
   function addQuote() {
     const newQuoteText = document.getElementById('newQuoteText').value;
     const newQuoteCategory = document.getElementById('newQuoteCategory').value;
   
     if (newQuoteText && newQuoteCategory) {
       // Add new quote to the array
-      quotes.push({ text: newQuoteText, category: newQuoteCategory });
+      const newQuote = { text: newQuoteText, category: newQuoteCategory };
+      quotes.push(newQuote);
   
       // Save the quotes to localStorage
       saveQuotes();
+  
+      // Post the new quote to the server
+      postQuoteToServer(newQuote);
   
       // Update the quote display
       updateQuoteDisplay();
