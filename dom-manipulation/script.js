@@ -10,7 +10,52 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     localStorage.setItem('quotes', JSON.stringify(quotes));
   }
   
-  // Function to display a random quote
+  // Function to populate the categories dropdown dynamically
+  function populateCategories() {
+    const categoryFilter = document.getElementById('categoryFilter');
+    
+    // Get unique categories from the quotes array
+    const categories = [...new Set(quotes.map(quote => quote.category))];
+    
+    // Clear the current options in the dropdown (except for "All Categories")
+    categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+    
+    // Add each category as an option
+    categories.forEach(category => {
+      const option = document.createElement('option');
+      option.value = category;
+      option.textContent = category;
+      categoryFilter.appendChild(option);
+    });
+    
+    // Load last selected category from localStorage (if any)
+    const lastSelectedCategory = localStorage.getItem('lastSelectedCategory');
+    if (lastSelectedCategory) {
+      categoryFilter.value = lastSelectedCategory;
+    }
+  }
+  
+  // Function to display quotes based on the selected category
+  function filterQuotes() {
+    const category = document.getElementById('categoryFilter').value;
+  
+    // Save the selected category to localStorage
+    localStorage.setItem('lastSelectedCategory', category);
+  
+    // Filter quotes by category
+    const filteredQuotes = category === 'all' 
+      ? quotes 
+      : quotes.filter(quote => quote.category === category);
+  
+    // Display the filtered quotes
+    const quoteDisplay = document.getElementById('quoteDisplay');
+    quoteDisplay.innerHTML = filteredQuotes.map(quote => `
+      <p><strong>Category:</strong> ${quote.category}</p>
+      <p>"${quote.text}"</p>
+    `).join('');
+  }
+  
+  // Function to show a random quote
   function showRandomQuote() {
     const randomIndex = Math.floor(Math.random() * quotes.length);
     const randomQuote = quotes[randomIndex];
@@ -36,6 +81,9 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   
       // Save the quotes to localStorage
       saveQuotes();
+  
+      // Update the category filter dropdown with the new category
+      populateCategories();
   
       // Clear input fields after adding
       document.getElementById('newQuoteText').value = '';
@@ -79,6 +127,7 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
         if (Array.isArray(importedQuotes)) {
           quotes = importedQuotes;
           saveQuotes(); // Save to localStorage
+          populateCategories(); // Re-populate categories
           alert('Quotes imported successfully!');
         } else {
           alert('Invalid JSON format');
@@ -96,9 +145,8 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   // Event listener for export button
   document.getElementById('exportButton').addEventListener('click', exportToJson);
   
-  // Optional: Display an initial quote when the page loads
-  showRandomQuote();
-  
-  // Call createAddQuoteForm function to create the form dynamically when the page loads
+  // Initial setup when the page loads
+  populateCategories();
+  filterQuotes();  // To load the quotes based on the selected category
   createAddQuoteForm();
   
