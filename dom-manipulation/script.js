@@ -29,24 +29,25 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     });
     
     // Load last selected category from localStorage (if any)
-    const lastSelectedCategory = localStorage.getItem('SelectedCategory');
-    if (SelectedCategory) {
-      categoryFilter.value = SelectedCategory;
+    const lastSelectedCategory = localStorage.getItem('lastSelectedCategory');
+    if (lastSelectedCategory) {
+      categoryFilter.value = lastSelectedCategory;
       filterQuotes();  // Apply the last selected category
     }
   }
   
   // Function to display quotes based on the selected category
   function filterQuotes() {
-    const category = document.getElementById('categoryFilter').value;
+    const categoryFilter = document.getElementById('categoryFilter');
+    const selectedCategory = categoryFilter.value; // This is where the "selectedCategory" variable is used
   
     // Save the selected category to localStorage for future sessions
-    localStorage.setItem('lastSelectedCategory', category);
+    localStorage.setItem('lastSelectedCategory', selectedCategory);
   
     // Filter quotes by category
-    const filteredQuotes = category === 'all' 
+    const filteredQuotes = selectedCategory === 'all' 
       ? quotes 
-      : quotes.filter(quote => quote.category === category);
+      : quotes.filter(quote => quote.category === selectedCategory);
   
     // Display the filtered quotes
     const quoteDisplay = document.getElementById('quoteDisplay');
