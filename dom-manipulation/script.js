@@ -57,6 +57,19 @@ function updateQuoteDisplay(filteredQuotes) {
   `).join('');
 }
 
+// Function to display a random quote
+function displayRandomQuote() {
+  const randomIndex = Math.floor(Math.random() * quotes.length);  // Random index from 0 to quotes.length - 1
+  const randomQuote = quotes[randomIndex];
+
+  // Display the random quote on the page
+  const quoteDisplay = document.getElementById('quoteDisplay');
+  quoteDisplay.innerHTML = `
+    <p><strong>Category:</strong> ${randomQuote.category}</p>
+    <p>"${randomQuote.text}"</p>
+  `;
+}
+
 // Create the "Add Quote" form
 function createAddQuoteForm() {
   const formDiv = document.createElement('div');
