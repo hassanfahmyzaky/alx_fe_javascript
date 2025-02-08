@@ -58,7 +58,7 @@ function updateQuoteDisplay(filteredQuotes) {
 }
 
 // Function to display a random quote
-function displayRandomQuote() {
+function showRandomQuote() {
   const randomIndex = Math.floor(Math.random() * quotes.length);  // Random index from 0 to quotes.length - 1
   const randomQuote = quotes[randomIndex];
 
@@ -138,7 +138,7 @@ populateCategories();   // Populate the category filter dropdown
 updateQuoteDisplay(quotes);  // Display all quotes initially
 
 // Event listener for the random quote button
-document.getElementById('randomQuoteButton').addEventListener('click', displayRandomQuote);
+document.getElementById('randomQuoteButton').addEventListener('click', showRandomQuote);
 
 // Event listener for export button
 document.getElementById('exportButton').addEventListener('click', exportToJson);
