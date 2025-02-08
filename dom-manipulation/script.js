@@ -49,7 +49,7 @@ async function syncQuotes() {
   updateQuoteDisplay(quotes);
 
   // Notify user that data was synced
-  alert("Data synced with the server.");
+  showSyncNotification("Quotes synced with server!");
 }
 
 // Function to merge server quotes with local quotes (conflict resolution)
@@ -112,7 +112,7 @@ async function addQuote() {
 
     document.getElementById('newQuoteText').value = '';
     document.getElementById('newQuoteCategory').value = '';
-    alert("New quote added and synced with the server!");
+    showSyncNotification("New quote added and synced with the server!");
   } else {
     alert("Please fill in both fields to add a new quote.");
   }
@@ -200,6 +200,19 @@ function filterQuotes() {
   
   // Update the displayed quotes
   updateQuoteDisplay(filteredQuotes);
+}
+
+// Function to show sync notification
+function showSyncNotification(message) {
+  const notification = document.createElement('div');
+  notification.classList.add('sync-notification');
+  notification.textContent = message;
+  document.body.appendChild(notification);
+
+  // Automatically remove the notification after 3 seconds
+  setTimeout(() => {
+    notification.remove();
+  }, 3000);
 }
 
 // Initial setup when the page loads
