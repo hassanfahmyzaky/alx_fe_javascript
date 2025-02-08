@@ -49,7 +49,7 @@ async function syncQuotes() {
   updateQuoteDisplay(quotes);
 
   // Notify user that data was synced
-  alert("Data synced with the server.");
+  showSyncNotification("Quotes synced with server!");
 }
 
 // Function to merge server quotes with local quotes (conflict resolution)
@@ -156,10 +156,25 @@ function updateQuoteDisplay(filteredQuotes) {
   const quoteDisplay = document.getElementById('quoteDisplay');
   
   // Display the quotes (filtered or all)
-  quoteDisplay.innerHTML = filteredQuotes.map(quote => `
+  quoteDisplay.innerHTML = filteredQuotes.map(quote => `  
     <p><strong>Category:</strong> ${quote.category}</p>
     <p>"${quote.text}"</p>
   `).join('');
+}
+
+// Function to display a sync notification
+function showSyncNotification(message) {
+  const notification = document.createElement('div');
+  notification.classList.add('notification');
+  notification.innerText = message;
+
+  // Append notification to the body
+  document.body.appendChild(notification);
+  
+  // Auto-dismiss the notification after 3 seconds
+  setTimeout(() => {
+    notification.remove();
+  }, 3000);
 }
 
 // Initialize the app
@@ -191,7 +206,7 @@ function showRandomQuote() {
 
   // Display the random quote on the page
   const quoteDisplay = document.getElementById('quoteDisplay');
-  quoteDisplay.innerHTML = `
+  quoteDisplay.innerHTML = `  
     <p><strong>Category:</strong> ${randomQuote.category}</p>
     <p>"${randomQuote.text}"</p>
   `;
