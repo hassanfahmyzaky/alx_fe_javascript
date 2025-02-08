@@ -33,7 +33,7 @@ async function fetchQuotesFromServer() {
 }
 
 // Function to sync local data with server data
-async function syncWithServer() {
+async function syncQuotes() {
   const serverQuotes = await fetchQuotesFromServer();
 
   if (serverQuotes.length === 0) {
@@ -77,7 +77,7 @@ function mergeQuotes(serverQuotes, localQuotes) {
 // Function to periodically check for server updates
 function startAutoSync() {
   setInterval(() => {
-    syncWithServer();
+    syncQuotes();
   }, 10000);  // Check every 10 seconds for simplicity
 }
 
