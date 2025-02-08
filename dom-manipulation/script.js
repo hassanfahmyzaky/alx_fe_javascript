@@ -49,7 +49,7 @@ async function syncQuotes() {
   updateQuoteDisplay(quotes);
 
   // Notify user that data was synced
-  showSyncNotification("Quotes synced with server!");
+  alert("Data synced with the server.");
 }
 
 // Function to merge server quotes with local quotes (conflict resolution)
@@ -156,28 +156,53 @@ function updateQuoteDisplay(filteredQuotes) {
   const quoteDisplay = document.getElementById('quoteDisplay');
   
   // Display the quotes (filtered or all)
-  quoteDisplay.innerHTML = filteredQuotes.map(quote => `  
+  quoteDisplay.innerHTML = filteredQuotes.map(quote => `
     <p><strong>Category:</strong> ${quote.category}</p>
     <p>"${quote.text}"</p>
   `).join('');
 }
 
-// Function to display a sync notification
-function showSyncNotification(message) {
-  const notification = document.createElement('div');
-  notification.classList.add('notification');
-  notification.innerText = message;
-
-  // Append notification to the body
-  document.body.appendChild(notification);
+// Function to populate the category filter dropdown
+function populateCategories() {
+  const categoryFilter = document.getElementById('categoryFilter');
   
-  // Auto-dismiss the notification after 3 seconds
-  setTimeout(() => {
-    notification.remove();
-  }, 3000);
+  // Create a list of unique categories from the existing quotes
+  const categories = [...new Set(quotes.map(quote => quote.category))];
+
+  // Clear the existing options in the dropdown
+  categoryFilter.innerHTML = '';
+
+  // Add a default "All" option
+  const allOption = document.createElement('option');
+  allOption.textContent = 'All Categories';
+  categoryFilter.appendChild(allOption);
+
+  // Add an option for each unique category
+  categories.forEach(category => {
+    const option = document.createElement('option');
+    option.textContent = category;  // Set the text content for each category option
+    categoryFilter.appendChild(option);
+  });
 }
 
-// Initialize the app
+// Function to filter quotes based on the selected category
+function filterQuotes() {
+  const categoryFilter = document.getElementById('categoryFilter');
+  const selectedCategory = categoryFilter.value;
+
+  // Filter quotes based on selected category
+  let filteredQuotes;
+  if (selectedCategory === "all") {
+    filteredQuotes = quotes;  // Show all quotes
+  } else {
+    filteredQuotes = quotes.filter(quote => quote.category === selectedCategory); // Filter by category
+  }
+  
+  // Update the displayed quotes
+  updateQuoteDisplay(filteredQuotes);
+}
+
+// Initial setup when the page loads
 createAddQuoteForm();  // Create the "Add Quote" form
 populateCategories();   // Populate the category filter dropdown
 updateQuoteDisplay(quotes);  // Display all quotes initially
@@ -206,8 +231,29 @@ function showRandomQuote() {
 
   // Display the random quote on the page
   const quoteDisplay = document.getElementById('quoteDisplay');
-  quoteDisplay.innerHTML = `  
+  quoteDisplay.innerHTML = `
     <p><strong>Category:</strong> ${randomQuote.category}</p>
     <p>"${randomQuote.text}"</p>
   `;
+}
+
+// Function to import quotes from a JSON file
+function importFromJsonFile(event) {
+  const fileReader = new FileReader();
+  fileReader.onload = function(event) {
+    try {
+      const importedQuotes = JSON.parse(event.target.result);
+      if (Array.isArray(importedQuotes)) {
+        quotes = importedQuotes;
+        saveQuotes(); // Save to localStorage
+        updateQuoteDisplay(); // Update the display with imported quotes
+        alert('Quotes imported successfully!');
+      } else {
+        alert('Invalid JSON format');
+      }
+    } catch (error) {
+      alert('Error importing file');
+    }
+  };
+  fileReader.readAsText(event.target.files[0]);
 }
